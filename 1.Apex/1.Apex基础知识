@@ -1,0 +1,448 @@
+# 🧱 一、什么是类（Class）？
+
+👉 **比喻：类就像一张蓝图或模具。**
+
+比如你要造汽车：
+
+* 蓝图上写着“颜色”“速度”这些属性。
+* 也画着“启动”“刹车”这些功能。
+
+这张蓝图就是 **类（class）**。
+根据这张蓝图造出的具体汽车，就是 **对象（object）**。
+
+---
+
+# 🚗 二、普通类的基本构成
+
+Apex 里的类由几个部分组成：
+
+```apex
+// 🔹 访问修饰符 + 关键字 + 类名
+public class Car {
+    
+    // 🔸 成员变量（对象属性）
+    public String color;    // 每辆车都有自己的颜色
+    public Integer speed;   // 每辆车的速度不同
+    
+    // 🔸 静态变量（所有车共享）
+    public static Integer wheelCount = 4; // 所有车默认4个轮子
+    
+    // 🔸 构造方法（造车时会自动执行）
+    public Car(String color, Integer speed) {
+        // 使用 this 表示当前对象
+        this.color = color;
+        this.speed = speed;
+    }
+    
+    // 🔸 普通方法（车的行为）
+    public void drive() {
+        System.debug('The ' + color + ' car is driving at ' + speed + ' km/h.');
+    }
+    
+    // 🔸 静态方法（所有车共享的行为）
+    public static void showWheelCount() {
+        System.debug('All cars have ' + wheelCount + ' wheels.');
+    }
+}
+```
+
+---
+
+# 🧭 三、访问修饰符（Access Modifiers）
+
+👉 **比喻：门锁的权限。**
+
+| 修饰符         | 含义                    | 比喻   |
+| ----------- | --------------------- | ---- |
+| `public`    | 对所有人开放                | 大门敞开 |
+| `private`   | 只限类内部使用               | 私人房间 |
+| `protected` | 本类和子类能用               | 家族成员 |
+| `global`    | 在 Salesforce 整个平台都能访问 | 世界通用 |
+
+---
+
+# 🪙 四、关键字（Keywords）
+
+关键字是 Apex 的“专用词”，它们告诉系统这段代码在干什么。
+
+| 关键字      | 含义            | 比喻            |
+| -------- | ------------- | ------------- |
+| `class`  | 定义一个类         | 画蓝图           |
+| `static` | 属于整个类，而不是某个对象 | 所有汽车的“品牌logo” |
+| `final`  | 不能修改          | 不可改变的规则       |
+| `return` | 方法返回结果        | 把计算结果交出去      |
+| `this`   | 当前对象自身        | “这辆车自己”       |
+
+---
+
+# 🧰 五、变量（Variables）
+
+变量是用来“存储数据”的容器，就像“储物柜”。
+
+## 1️⃣ 成员变量（Member Variable）
+
+写在类中，用来描述对象属性：
+
+```apex
+public class Car {
+    public String color;   // 成员变量：车的颜色
+    public Integer speed;  // 成员变量：车的速度
+}
+```
+
+📦 每辆车都有自己的颜色和速度。
+
+---
+
+## 2️⃣ 局部变量（Local Variable）
+
+写在方法中，只在方法执行时存在：
+
+```apex
+public void drive() {
+    Integer distance = 100;  // 局部变量：只在drive()中使用
+    System.debug('Driving for ' + distance + ' km');
+}
+```
+
+📝 就像“临时便条”，方法执行完就消失。
+
+---
+
+# 🔢 六、变量类型（Variable Types）
+
+变量根据存储内容的不同分为三种：
+
+---
+
+### （1）基本数据类型（Primitive Types）
+
+最常见的类型：数字、文字、真假等。
+
+| 类型         | 示例                   | 含义            |
+| ---------- | -------------------- | ------------- |
+| `Integer`  | 10                   | 整数            |
+| `Decimal`  | 10.5                 | 小数            |
+| `Boolean`  | true/false           | 开关状态          |
+| `String`   | 'Red'                | 文字            |
+| `Date`     | Date.today()         | 日期            |
+| `Datetime` | Datetime.now()       | 日期+时间         |
+| `Id`       | '001xx000003DHP3AAO' | Salesforce ID |
+
+---
+
+### （2）引用数据类型（Reference Types）
+
+是指向对象的变量（就像车钥匙指向那辆车）。
+
+```apex
+Car myCar = new Car('Blue', 120); // myCar指向那辆蓝车
+```
+
+`myCar` 并不是车本身，而是“指针”或“钥匙”。
+
+---
+
+### （3）SObject 类型（Salesforce 特有）
+
+Salesforce 里的标准或自定义对象，比如 `Account`、`Contact` 等。
+
+```apex
+Account acc = new Account(Name = 'Tesla', Industry = 'Automobile');
+insert acc; // 保存到数据库
+```
+
+📊 可以理解为系统里的“数据记录”。
+
+---
+
+# ⚙️ 七、静态变量 vs 普通变量
+
+| 类型   | 属于谁    | 用法               | 比喻        |
+| ---- | ------ | ---------------- | --------- |
+| 普通变量 | 属于每个对象 | `myCar.color`    | 每辆车有自己的颜色 |
+| 静态变量 | 属于整个类  | `Car.wheelCount` | 所有车共有的轮数  |
+
+```apex
+Car.wheelCount = 6; // 所有车的轮子都改成6个
+```
+
+---
+
+# 🧩 八、方法（Methods）
+
+方法 = 功能按钮。
+比如汽车的“启动”“刹车”“鸣笛”。
+
+---
+
+## 方法的基本结构：
+
+```apex
+[访问修饰符] [返回类型] 方法名(参数) {
+    // 方法体
+}
+```
+
+### 例子：
+
+```apex
+public Integer addSpeed(Integer value) {
+    speed += value;              // 将输入值加到当前速度上
+    return speed;                // 返回新的速度
+}
+```
+
+| 元素    | 含义          | 示例                        |
+| ----- | ----------- | ------------------------- |
+| 访问修饰符 | 谁能用         | `public`                  |
+| 返回类型  | 方法返回什么类型的数据 | `Integer`                 |
+| 方法名   | 功能名         | `addSpeed`                |
+| 参数    | 输入内容        | `(Integer value)`         |
+| 方法体   | 具体功能        | `{ speed += value; ... }` |
+
+---
+
+## 方法类型：
+
+| 类型   | 属于谁  | 调用方式                    | 示例      |
+| ---- | ---- | ----------------------- | ------- |
+| 普通方法 | 属于对象 | `myCar.drive();`        | 每辆车能自己开 |
+| 静态方法 | 属于类  | `Car.showWheelCount();` | 类的共用功能  |
+
+---
+
+# 💡 九、变量与方法结合的例子
+
+```apex
+public class Student {
+    public String name;
+    public Integer score;
+    
+    public Student(String n, Integer s) {
+        name = n;
+        score = s;
+    }
+    
+    // 提高分数
+    public void addScore(Integer value) {
+        score += value;
+        System.debug(name + ' gained ' + value + ' points, now has ' + score);
+    }
+    
+    // 返回是否及格
+    public Boolean isPassed() {
+        return score >= 60;
+    }
+}
+```
+
+```apex
+Student tom = new Student('Tom', 55);
+tom.addScore(10); // Tom gained 10 points, now has 65
+System.debug(tom.isPassed()); // true
+```
+
+---
+
+# 🪣 十、集合（Collections）
+
+👉 **比喻：能装多个东西的容器。**
+
+Apex 有三种主要集合：
+
+* `List`：有顺序、可重复（像排队名单）
+* `Set`：无顺序、不重复（像会员名册）
+* `Map`：键值对结构（像词典）
+
+---
+
+## 1️⃣ List（列表）
+
+```apex
+List<String> colors = new List<String>{'Red', 'Blue', 'Green'};
+
+// 添加元素
+colors.add('Yellow');
+
+// 获取元素（按顺序）
+System.debug(colors[0]); // Red
+
+// 获取长度
+System.debug(colors.size()); // 4
+```
+
+📍 **特点：**
+
+* 有顺序
+* 可重复
+* 用索引访问（第一个是0）
+
+📘 **常用方法：**
+
+| 方法              | 说明        |
+| --------------- | --------- |
+| `add(value)`    | 添加元素      |
+| `remove(index)` | 删除某个位置的元素 |
+| `size()`        | 返回元素数量    |
+| `isEmpty()`     | 是否为空      |
+| `clear()`       | 清空列表      |
+
+---
+
+## 2️⃣ Set（集合）
+
+```apex
+Set<String> fruits = new Set<String>{'Apple', 'Banana', 'Apple'};
+System.debug(fruits); // {'Apple', 'Banana'}，自动去重
+
+fruits.add('Orange');
+fruits.remove('Banana');
+```
+
+📍 **特点：**
+
+* 无顺序
+* 元素唯一（自动去重）
+
+📘 **常用方法：**
+
+| 方法                | 说明     |
+| ----------------- | ------ |
+| `add(value)`      | 添加元素   |
+| `contains(value)` | 判断是否存在 |
+| `remove(value)`   | 删除元素   |
+| `size()`          | 元素数量   |
+| `clear()`         | 清空集合   |
+
+---
+
+## 3️⃣ Map（映射）
+
+```apex
+Map<String, Integer> ageMap = new Map<String, Integer>();
+ageMap.put('Tom', 20);
+ageMap.put('Lucy', 25);
+
+// 取值
+System.debug(ageMap.get('Tom')); // 20
+
+// 遍历
+for(String name : ageMap.keySet()) {
+    System.debug(name + ' is ' + ageMap.get(name) + ' years old.');
+}
+```
+
+📍 **特点：**
+
+* 键（key）和值（value）成对出现
+* 通过key访问value
+
+📘 **常用方法：**
+
+| 方法                 | 说明       |
+| ------------------ | -------- |
+| `put(key, value)`  | 添加键值对    |
+| `get(key)`         | 取值       |
+| `containsKey(key)` | 判断是否存在该键 |
+| `remove(key)`      | 删除某项     |
+| `keySet()`         | 所有键集合    |
+| `values()`         | 所有值集合    |
+| `size()`           | 键值对数量    |
+
+---
+
+# 🧬 十一、泛型（Generics）
+
+👉 **比喻：可定制的容器模具。**
+
+`List<String>` 表示一个“装文字”的袋子，
+`List<Integer>` 则是“装数字”的袋子。
+
+```apex
+List<Account> accList = new List<Account>();
+Set<Id> accountIds = new Set<Id>();
+Map<Id, Account> accMap = new Map<Id, Account>();
+```
+
+这样可以让集合更安全，防止放错类型。
+
+---
+
+# 🧩 十二、完整例子（串联所有知识）
+
+```apex
+public class School {
+    
+    // 🔸 成员变量（每个学校不同）
+    public String name;
+    public List<Student> students;
+    
+    // 🔸 静态变量（所有学校共享）
+    public static String country = 'Japan';
+    
+    // 🔸 构造方法
+    public School(String name) {
+        this.name = name;
+        this.students = new List<Student>();
+    }
+    
+    // 🔸 添加学生（使用List）
+    public void addStudent(Student s) {
+        students.add(s);
+        System.debug(s.name + ' joined ' + name);
+    }
+    
+    // 🔸 获取平均分
+    public Decimal getAverageScore() {
+        Decimal total = 0;
+        for(Student s : students) {
+            total += s.score;
+        }
+        return total / students.size();
+    }
+    
+    // 🔸 静态方法
+    public static void showCountry() {
+        System.debug('All schools are in ' + country);
+    }
+}
+
+public class Student {
+    public String name;
+    public Integer score;
+    
+    public Student(String n, Integer s) {
+        name = n;
+        score = s;
+    }
+}
+```
+
+```apex
+// 测试
+School sch = new School('Tokyo High');
+Student a = new Student('Aiko', 90);
+Student b = new Student('Taro', 80);
+sch.addStudent(a);
+sch.addStudent(b);
+
+System.debug('Average score: ' + sch.getAverageScore()); // 85
+School.showCountry(); // All schools are in Japan
+```
+
+---
+
+# 🎯 总结图
+
+| 概念   | 比喻     | 示例                          |
+| ---- | ------ | --------------------------- |
+| 类    | 蓝图     | `class Car`                 |
+| 对象   | 实际物品   | `new Car()`                 |
+| 成员变量 | 属性     | `String color`              |
+| 局部变量 | 临时笔记   | `Integer temp`              |
+| 静态变量 | 所有对象共享 | `static Integer wheelCount` |
+| 方法   | 功能按钮   | `drive()`                   |
+| 集合   | 容器     | `List`, `Set`, `Map`        |
+| 泛型   | 模具模板   | `List<String>`              |
+
